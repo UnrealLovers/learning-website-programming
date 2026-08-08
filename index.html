@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeQuest — Roadmap Belajar Coding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== TOP BAR ===================== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="brand" id="btn-home" type="button">
+      <span class="brand-mark">&lt;/&gt;</span>
+      <span class="brand-name">CodeQuest</span>
+    </button>
+    <div class="topbar-stats">
+      <div class="stat" title="Total materi selesai">
+        <span class="stat-icon">✅</span>
+        <span id="stat-materi">0</span><span class="stat-suffix">/1300</span>
+      </div>
+      <div class="stat" title="XP terkumpul">
+        <span class="stat-icon">⚡</span>
+        <span id="stat-xp">0</span><span class="stat-suffix">XP</span>
+      </div>
+      <div class="stat" title="Level saat ini">
+        <span class="stat-icon">📍</span>
+        <span id="stat-level">1</span><span class="stat-suffix">/100</span>
+      </div>
+    </div>
+    <button class="btn-reset" id="btn-reset" type="button" title="Reset progres">Reset</button>
+  </div>
+</header>
+
+<!-- ===================== ROADMAP VIEW ===================== -->
+<main id="roadmap-view" class="view">
+  <section class="hero">
+    <p class="hero-eyebrow">roadmap · 100 level · 13 materi / level</p>
+    <h1 class="hero-title">Jalur belajarmu, satu commit&nbsp;pada&nbsp;satu&nbsp;waktu.</h1>
+    <p class="hero-sub">Dari <code>&lt;html&gt;</code> pertama sampai proyek akhir. Tiap level punya 13 materi singkat (baca, kuis, tantangan kode) — sekitar 2 menit per materi, jalan santai tanpa timer.</p>
+    <div class="hero-progress">
+      <div class="hero-progress-track"><div class="hero-progress-fill" id="hero-progress-fill"></div></div>
+      <span id="hero-progress-label">0% jalur selesai</span>
+    </div>
+  </section>
+
+  <div class="roadmap-wrap" id="roadmap-wrap">
+    <!-- world groups + snake path di-render lewat JS -->
+  </div>
+</main>
+
+<!-- ===================== LEVEL VIEW ===================== -->
+<main id="level-view" class="view view-hidden">
+  <div class="level-header">
+    <button class="btn-back" id="btn-back" type="button">← Kembali ke roadmap</button>
+    <div class="level-header-meta">
+      <span class="level-world-tag" id="level-world-tag">World</span>
+      <h2 id="level-title">Judul Level</h2>
+    </div>
+    <div class="level-progress">
+      <div class="level-progress-track"><div class="level-progress-fill" id="level-progress-fill"></div></div>
+      <span id="level-progress-label">0/13 materi</span>
+    </div>
+  </div>
+
+  <div class="level-body">
+    <nav class="materi-rail" id="materi-rail" aria-label="Daftar materi"></nav>
+
+    <section class="materi-panel" id="materi-panel">
+      <!-- konten materi aktif di-render lewat JS -->
+    </section>
+  </div>
+</main>
+
+<!-- ===================== LEVEL COMPLETE OVERLAY ===================== -->
+<div class="overlay-hidden" id="complete-overlay">
+  <div class="complete-card">
+    <div class="complete-emoji">🎉</div>
+    <h3>Level selesai!</h3>
+    <p id="complete-text">Kamu menyelesaikan semua 13 materi di level ini.</p>
+    <div class="complete-actions">
+      <button class="btn-secondary" id="btn-complete-roadmap" type="button">Lihat roadmap</button>
+      <button class="btn-primary" id="btn-complete-next" type="button">Lanjut level berikutnya →</button>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
