@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — CodeQuest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== TOP BAR ===================== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">&lt;/&gt;</span>
+      <span class="brand-name">CodeQuest</span>
+    </a>
+    <nav class="page-nav">
+      <a class="btn-settings" href="index.html">← Roadmap</a>
+      <a class="btn-settings" href="profile.html">👤 Profil</a>
+    </nav>
+  </div>
+</header>
+
+<main class="view">
+  <div class="settings-header">
+    <p class="settings-eyebrow">pengaturan</p>
+    <h1>Settings</h1>
+    <p>Sesuaikan CodeQuest biar makin nyaman dipakai — semuanya tersimpan otomatis di browser ini.</p>
+  </div>
+
+  <div class="settings-grid">
+
+    <!-- ===== TAMPILAN ===== -->
+    <section class="settings-section">
+      <div class="settings-section-head">
+        <span class="settings-section-icon">🎨</span>
+        <h2>Tampilan</h2>
+      </div>
+      <p class="settings-section-desc">Atur warna aksen, ukuran teks, dan animasi di seluruh aplikasi.</p>
+
+      <div class="field-row">
+        <div>
+          <div class="field-label">Warna aksen</div>
+          <div class="field-hint">Warna tombol, progress bar, dan level aktif</div>
+        </div>
+        <div class="swatch-row" id="swatch-row"></div>
+      </div>
+
+      <div class="field-row">
+        <div>
+          <div class="field-label">Ukuran teks</div>
+          <div class="field-hint">Buat materi bacaan &amp; soal</div>
+        </div>
+        <div class="pill-group" id="fontsize-group">
+          <button class="pill-opt" data-val="sm" type="button">Kecil</button>
+          <button class="pill-opt" data-val="md" type="button">Sedang</button>
+          <button class="pill-opt" data-val="lg" type="button">Besar</button>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div>
+          <div class="field-label">Kurangi animasi</div>
+          <div class="field-hint">Matikan efek pulse &amp; transisi kalau bikin pusing</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-motion">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ===== BELAJAR ===== -->
+    <section class="settings-section">
+      <div class="settings-section-head">
+        <span class="settings-section-icon">🎯</span>
+        <h2>Belajar</h2>
+      </div>
+      <p class="settings-section-desc">Preferensi ritme belajar kamu di CodeQuest.</p>
+
+      <div class="field-row">
+        <div>
+          <div class="field-label">Target harian</div>
+          <div class="field-hint">Jumlah materi yang mau kamu kejar tiap hari</div>
+        </div>
+        <div class="stepper">
+          <button class="stepper-btn" id="goal-minus" type="button">−</button>
+          <span class="stepper-val" id="goal-val">3 materi</span>
+          <button class="stepper-btn" id="goal-plus" type="button">+</button>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div>
+          <div class="field-label">Efek suara</div>
+          <div class="field-hint">Bunyi kecil saat jawaban benar &amp; level selesai</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-sound">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ===== DATA ===== -->
+    <section class="settings-section">
+      <div class="settings-section-head">
+        <span class="settings-section-icon">💾</span>
+        <h2>Cadangkan &amp; Pindahkan Data</h2>
+      </div>
+      <p class="settings-section-desc">Progres belajar (dan pengaturan ini) tersimpan di browser ini lewat <code class="mono">localStorage</code>. Ekspor kalau mau backup atau pindah ke perangkat lain.</p>
+
+      <div class="settings-actions-row">
+        <button class="btn-secondary" id="btn-export" type="button">⬇️ Ekspor progres (.json)</button>
+        <button class="btn-secondary" id="btn-import" type="button">⬆️ Impor progres</button>
+        <input type="file" id="import-file-input" accept="application/json">
+      </div>
+    </section>
+
+    <!-- ===== DANGER ZONE ===== -->
+    <section class="settings-section danger">
+      <div class="settings-section-head">
+        <span class="settings-section-icon">⚠️</span>
+        <h2>Reset Progres</h2>
+      </div>
+      <p class="danger-text">Menghapus semua materi, level, dan XP yang sudah kamu selesaikan. Nggak bisa dibatalkan — ekspor dulu kalau mau jaga-jaga.</p>
+      <button class="btn-danger" id="btn-reset-progress" type="button">Reset semua progres</button>
+    </section>
+
+    <!-- ===== TENTANG ===== -->
+    <section class="settings-section">
+      <div class="settings-section-head">
+        <span class="settings-section-icon">ℹ️</span>
+        <h2>Tentang CodeQuest</h2>
+      </div>
+      <p class="settings-section-desc" style="margin-bottom:0;">
+        CodeQuest v1.0 — roadmap belajar coding, 100 level × 13 materi, jalan santai tanpa timer.
+        Semua data (progres &amp; pengaturan) tersimpan lokal di browser ini lewat <code class="mono">localStorage</code>, nggak dikirim ke server manapun.
+      </p>
+    </section>
+
+  </div>
+</main>
+
+<div class="toast" id="toast">Tersimpan ✓</div>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="settings.js"></script>
+</body>
+</html>

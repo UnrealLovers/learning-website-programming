@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil — CodeQuest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== TOP BAR ===================== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">&lt;/&gt;</span>
+      <span class="brand-name">CodeQuest</span>
+    </a>
+    <nav class="page-nav">
+      <a class="btn-settings" href="index.html">← Roadmap</a>
+      <a class="btn-settings" href="settings.html">⚙️ Settings</a>
+    </nav>
+  </div>
+</header>
+
+<main class="view">
+
+  <!-- ===== PROFILE CARD ===== -->
+  <section class="profile-card">
+    <button class="profile-avatar" id="profile-avatar" type="button" title="Ganti avatar">🧑‍💻</button>
+    <div class="profile-info">
+      <input type="text" class="profile-name-input" id="input-username" placeholder="Isi nama panggilanmu" maxlength="24">
+      <p class="profile-sub" id="profile-sub">Level 1 · Belum ada materi selesai</p>
+    </div>
+  </section>
+
+  <div class="avatar-row" id="avatar-row" style="justify-content:center; margin: -10px 0 30px;"></div>
+
+  <!-- ===== STATS ===== -->
+  <section class="settings-section">
+    <div class="settings-section-head">
+      <span class="settings-section-icon">📊</span>
+      <h2>Statistik Belajar</h2>
+    </div>
+    <p class="settings-section-desc">Ringkasan progresmu di seluruh roadmap CodeQuest.</p>
+
+    <div class="stat-mini-grid">
+      <div class="stat-mini">
+        <div class="stat-mini-val" id="sum-level">1</div>
+        <div class="stat-mini-label">level saat ini</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-val" id="sum-levels-done">0</div>
+        <div class="stat-mini-label">level selesai</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-val" id="sum-materi">0</div>
+        <div class="stat-mini-label">materi selesai</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-val" id="sum-xp">0</div>
+        <div class="stat-mini-label">total XP</div>
+      </div>
+    </div>
+
+    <div class="hero-progress" style="margin-top:4px;">
+      <div class="hero-progress-track"><div class="hero-progress-fill" id="profile-progress-fill"></div></div>
+      <span id="profile-progress-label">0% roadmap selesai</span>
+    </div>
+  </section>
+
+  <!-- ===== BADGES ===== -->
+  <section class="settings-section" style="margin-top:18px;">
+    <div class="settings-section-head">
+      <span class="settings-section-icon">🏅</span>
+      <h2>Lencana World</h2>
+    </div>
+    <p class="settings-section-desc">Kebuka otomatis begitu semua 10 level di satu world kamu selesaikan.</p>
+    <div class="badge-grid" id="badge-grid"></div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast">Tersimpan ✓</div>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="profile.js"></script>
+</body>
+</html>

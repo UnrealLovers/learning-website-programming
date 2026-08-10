@@ -18,6 +18,7 @@
       <span class="brand-mark">&lt;/&gt;</span>
       <span class="brand-name">CodeQuest</span>
     </button>
+    <a class="greeting" id="greeting" href="profile.html" title="Buka profil"></a>
     <div class="topbar-stats">
       <div class="stat" title="Total materi selesai">
         <span class="stat-icon">✅</span>
@@ -32,7 +33,14 @@
         <span id="stat-level">1</span><span class="stat-suffix">/100</span>
       </div>
     </div>
-    <button class="btn-reset" id="btn-reset" type="button" title="Reset progres">Reset</button>
+    <nav class="page-nav">
+      <a class="btn-settings" href="profile.html" title="Profil">
+        <span class="btn-settings-icon">👤</span><span class="btn-settings-label">Profil</span>
+      </a>
+      <a class="btn-settings" href="settings.html" title="Pengaturan">
+        <span class="btn-settings-icon">⚙️</span><span class="btn-settings-label">Settings</span>
+      </a>
+    </nav>
   </div>
 </header>
 
@@ -90,6 +98,7 @@
 </div>
 
 <script src="data.js"></script>
+<script src="common.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

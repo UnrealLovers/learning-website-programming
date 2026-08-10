@@ -1,104 +1,11 @@
 /* =========================================================
-   CodeQuest — App Logic
+   CodeQuest — App Logic (roadmap & level view)
+   ---------------------------------------------------------
+   Semua state progres, profil, dan pengaturan dikelola
+   terpusat di common.js. File ini WAJIB dimuat setelah
+   data.js dan common.js (lihat urutan <script> di index.html)
+   — di sini cuma logic render roadmap + level view.
    ========================================================= */
-
-const STORAGE_KEY = "codequest_progress_v1";
-const MATERI_PER_LEVEL = 13;
-
-/* ---------------- State ---------------- */
-
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { completed: {} };
-    const parsed = JSON.parse(raw);
-    if (!parsed.completed) parsed.completed = {};
-    return parsed;
-  } catch (e) {
-    return { completed: {} };
-  }
-}
-
-function saveState() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.warn("Gagal menyimpan progres:", e);
-  }
-}
-
-let state = loadState();
-
-function getLevelArr(id) {
-  if (!state.completed[id]) {
-    state.completed[id] = Array(MATERI_PER_LEVEL).fill(false);
-  }
-  return state.completed[id];
-}
-
-function isMateriDone(levelId, idx) {
-  return !!getLevelArr(levelId)[idx];
-}
-
-function isLevelDone(levelId) {
-  return getLevelArr(levelId).every(Boolean);
-}
-
-function isLevelUnlocked(levelId) {
-  if (levelId === 1) return true;
-  return isLevelDone(levelId - 1);
-}
-
-function countCompletedMateri() {
-  let n = 0;
-  Object.values(state.completed).forEach((arr) => {
-    n += arr.filter(Boolean).length;
-  });
-  return n;
-}
-
-function countCompletedLevels() {
-  return LEVELS.filter((l) => isLevelDone(l.id)).length;
-}
-
-function computeXp() {
-  return countCompletedMateri() * 10 + countCompletedLevels() * 50;
-}
-
-function currentLevelId() {
-  const firstUnfinished = LEVELS.find((l) => isLevelUnlocked(l.id) && !isLevelDone(l.id));
-  if (firstUnfinished) return firstUnfinished.id;
-  const allDone = LEVELS.every((l) => isLevelDone(l.id));
-  return allDone ? 100 : 1;
-}
-
-/* ---------------- Helpers ---------------- */
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-function formatBody(str) {
-  return escapeHtml(str).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-}
-
-function levelById(id) {
-  return LEVELS.find((l) => l.id === id);
-}
-
-function worldOf(level) {
-  return WORLDS[level.world - 1];
-}
-
-function $(sel, root) { return (root || document).querySelector(sel); }
-function $all(sel, root) { return Array.from((root || document).querySelectorAll(sel)); }
-
-const TYPE_ICON = { reading: "📖", quiz: "❓", challenge: "⌨️" };
-const TYPE_LABEL = { reading: "Bacaan", quiz: "Kuis", challenge: "Tantangan Kode" };
 
 /* ---------------- Top bar stats ---------------- */
 
@@ -160,7 +67,6 @@ function renderRoadmap() {
 
 function layoutTrack(track, levels, curId) {
   const rowHeight = getCssPx("--row-height", 108);
-  const nodeSize = getCssPx("--node-size", 66);
   const n = levels.length;
   const pattern = generatePattern(n);
   const totalHeight = n * rowHeight;
@@ -172,17 +78,15 @@ function layoutTrack(track, levels, curId) {
   svg.setAttribute("viewBox", `0 0 100 ${totalHeight}`);
   svg.setAttribute("preserveAspectRatio", "none");
 
-  const points = levels.map((lvl, i) => {
-    const x = pattern[i];
-    const y = i * rowHeight + rowHeight / 2;
-    return { x, y, lvl };
-  });
+  const points = levels.map((lvl, i) => ({
+    x: pattern[i],
+    y: i * rowHeight + rowHeight / 2,
+    lvl,
+  }));
 
   if (points.length > 1) {
     let d = `M ${points[0].x} ${points[0].y}`;
-    for (let i = 1; i < points.length; i++) {
-      d += ` L ${points[i].x} ${points[i].y}`;
-    }
+    for (let i = 1; i < points.length; i++) d += ` L ${points[i].x} ${points[i].y}`;
     const path = document.createElementNS(svgNS, "path");
     path.setAttribute("d", d);
     path.setAttribute("fill", "none");
@@ -216,10 +120,7 @@ function layoutTrack(track, levels, curId) {
       <div class="node-label">${escapeHtml(lvl.title)}</div>
     `;
 
-    if (unlocked) {
-      node.querySelector(".node-btn").addEventListener("click", () => openLevel(lvl.id));
-    }
-
+    if (unlocked) node.querySelector(".node-btn").addEventListener("click", () => openLevel(lvl.id));
     track.appendChild(node);
   });
 }
@@ -238,6 +139,7 @@ let activeLevelId = null;
 let activeMateriIdx = 0;
 
 function showRoadmap() {
+  applySettings();
   $("#level-view").classList.add("view-hidden");
   $("#roadmap-view").classList.remove("view-hidden");
   renderRoadmap();
@@ -367,9 +269,7 @@ function renderMateriPanel(level) {
 
 function wireMateriEvents(level, m, done) {
   if (m.type === "reading") {
-    $("#btn-mark-done").addEventListener("click", () => {
-      completeMateri(level, true);
-    });
+    $("#btn-mark-done").addEventListener("click", () => completeMateri(level, true));
   } else if (m.type === "quiz") {
     if (!done) {
       $all(".quiz-opt").forEach((btn) => {
@@ -387,6 +287,7 @@ function wireMateriEvents(level, m, done) {
           fb.textContent = correct ? "Betul! Mantap." : "Belum tepat, tapi lihat jawaban yang benar di atas ya.";
           $("#btn-quiz-continue").style.display = "inline-block";
           $("#btn-quiz-skip").style.display = "none";
+          playChime(correct ? "correct" : "wrong");
           completeMateri(level, false);
         });
       });
@@ -397,9 +298,7 @@ function wireMateriEvents(level, m, done) {
     if (cont) cont.addEventListener("click", () => goNextMateri(level));
   } else if (m.type === "challenge") {
     if (!done) {
-      $("#btn-show-hint").addEventListener("click", () => {
-        $("#challenge-hint").classList.toggle("show");
-      });
+      $("#btn-show-hint").addEventListener("click", () => $("#challenge-hint").classList.toggle("show"));
       $("#btn-check").addEventListener("click", () => {
         const val = $("#code-input").value;
         const result = checkChallenge(val, m);
@@ -413,6 +312,7 @@ function wireMateriEvents(level, m, done) {
           $("#btn-challenge-skip").style.display = "none";
           $("#code-input").readOnly = true;
           $("#btn-challenge-continue").style.display = "inline-block";
+          playChime("correct");
           completeMateri(level, false);
         }
       });
@@ -428,7 +328,7 @@ function checkChallenge(code, m) {
   const lower = code.toLowerCase();
   const missing = (m.requiredTokens || []).filter((tok) => tok && !lower.includes(tok.toLowerCase()));
   if (m.minLength && code.trim().length < m.minLength) {
-    return { pass: false, message: `Kodenya kayaknya masih terlalu pendek, coba dikembangin sedikit lagi.` };
+    return { pass: false, message: "Kodenya kayaknya masih terlalu pendek, coba dikembangin sedikit lagi." };
   }
   if (missing.length > 0) {
     return { pass: false, message: `Belum ketemu nih: "${missing.join('", "')}". Coba cek lagi kodenya.` };
@@ -437,10 +337,8 @@ function checkChallenge(code, m) {
 }
 
 function completeMateri(level, autoRerender) {
-  const arr = getLevelArr(level.id);
-  const wasDone = arr[activeMateriIdx];
-  arr[activeMateriIdx] = true;
-  saveState();
+  const wasDone = isMateriDone(level.id, activeMateriIdx);
+  markMateriComplete(level.id, activeMateriIdx);
   renderMateriRail(level);
   renderLevelProgress(level);
   renderTopbarStats();
@@ -474,6 +372,7 @@ function goNextMateri(level) {
 
 function maybeShowLevelComplete(level) {
   if (!isLevelDone(level.id)) return;
+  playChime("complete");
   const overlay = $("#complete-overlay");
   const hasNext = level.id < 100;
   $("#complete-text").textContent = hasNext
@@ -488,14 +387,6 @@ function maybeShowLevelComplete(level) {
 function init() {
   $("#btn-home").addEventListener("click", showRoadmap);
   $("#btn-back").addEventListener("click", showRoadmap);
-
-  $("#btn-reset").addEventListener("click", () => {
-    if (confirm("Yakin mau reset semua progres belajar? Ini nggak bisa dibatalkan.")) {
-      state = { completed: {} };
-      saveState();
-      showRoadmap();
-    }
-  });
 
   $("#btn-complete-roadmap").addEventListener("click", () => {
     $("#complete-overlay").classList.add("overlay-hidden");
