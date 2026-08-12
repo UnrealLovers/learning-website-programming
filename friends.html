@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeQuest - Friends</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navbar / Header Navigasi -->
+  <header>
+    <nav class="navbar">
+      <h1 class="logo">CodeQuest</h1>
+      <ul class="nav-links">
+        <li><a href="index.html">Roadmap</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="friends.html" class="active">Friends</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Konten Utama -->
+  <main class="friends-container">
+    <h2>Fitur Pertemanan</h2>
+
+    <!-- Card Profil Kamu -->
+    <div class="card">
+      <h3>ID Kamu</h3>
+      <p>ID: <strong id="my-id-display">CQ-USER1</strong></p>
+    </div>
+
+    <!-- Card Cari & Tambah Teman -->
+    <div class="card">
+      <h3>Tambah Teman</h3>
+      <div class="input-group">
+        <input type="text" id="friend-id-input" placeholder="Masukkan ID Teman (misal: CQ-USER2)">
+        <button id="btn-add-friend">Kirim Request</button>
+      </div>
+      <p id="status-msg" class="status-msg"></p>
+    </div>
+
+    <!-- Card Permintaan Masuk -->
+    <div class="card">
+      <h3>Permintaan Masuk (<span id="pending-count">0</span>)</h3>
+      <ul id="pending-list" class="item-list"></ul>
+    </div>
+
+    <!-- Card Daftar Teman -->
+    <div class="card">
+      <h3>Daftar Teman</h3>
+      <ul id="friends-list" class="item-list"></ul>
+    </div>
+  </main>
+
+  <script type="module" src="friends.js"></script>
+</body>
+</html>
